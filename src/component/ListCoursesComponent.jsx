@@ -1,5 +1,6 @@
 import React from "react";
 import CourseDataService from "../service/CourseDataService";
+import {Link} from "react-router-dom";
 
 const {Component} = require("react");
 
@@ -22,7 +23,7 @@ class ListCoursesComponent extends Component {
         CourseDataService.deleteCourse(this.INSTRUCTORS, id)
             .then(
                 response => {
-                    this.setState({ message: `Delete of course ${id} Successful` })
+                    this.setState({message: `Delete of course ${id} Successful`})
                     this.refreshCourses()
                 }
             );
@@ -42,6 +43,15 @@ class ListCoursesComponent extends Component {
 
     }
 
+    addCourseClicked = () => {
+        this.props.history.push(`/courses/-1`)
+    }
+
+    updateCourseClicked = (id) => {
+        console.log('update ' + id)
+        this.props.history.push(`/courses/${id}`)
+    };
+
     render() {
         return (
             <div className="container">
@@ -54,6 +64,7 @@ class ListCoursesComponent extends Component {
                             <th>#</th>
                             <th>Id</th>
                             <th>Description</th>
+                            <th>Update</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -71,15 +82,33 @@ class ListCoursesComponent extends Component {
                                                 Delete
                                             </button>
                                         </td>
+                                        <td>
+                                            <Link to={`/courses/${course.id}`}>
+                                                <button
+                                                    className="btn btn-success"
+                                                    //onClick={(event) => {event.preventDefault(); event.stopPropagation();}
+                                                >
+                                                    Update
+                                                </button>
+                                            </Link>
+                                        </td>
                                     </tr>
                             )
                         }
                         </tbody>
                     </table>
+                    <div className="row">
+                        <Link to={"/courses/-1"}>
+                        <button
+                            className="btn btn-success">
+                            Add
+                        </button>
+                    </Link>
                 </div>
             </div>
-        )
+    </div>
+    )
     }
-}
+    }
 
-export default ListCoursesComponent
+    export default ListCoursesComponent
