@@ -9,9 +9,8 @@ class CourseDataService {
 
     retrieveAllCourses(name) {
         console.log('executed service')
-        return axios.get(`${INSTRUCTOR_API_URL}/courses`,
-            { headers: { authorization: 'Basic ' + window.btoa(INSTRUCTOR + ":" + PASSWORD) } }
-        );
+        return axios.get(`${INSTRUCTOR_API_URL}/courses`);
+
     }
 
 

@@ -21,10 +21,9 @@ class InstructorApp extends Component {
                             <AuthenticatedRoute path="/" exact component={ListCoursesComponent}/>
                             <AuthenticatedRoute path="/courses" exact component={ListCoursesComponent}/>
                             <AuthenticatedRoute path="/courses/:id" component={CourseComponent}/>
+                            <AuthenticatedRoute path="/logout" exact component={LogoutComponent}/>
                             <Route path="/" exact component={LoginComponent}/>
                             <Route path="/login" exact component={LoginComponent}/>
-                            <AuthenticatedRoute path="/logout" exact component={LogoutComponent}/>
-                            <AuthenticatedRoute path="/courses" exact component={ListCoursesComponent}/>
                         </Switch>
                     </>
                 </Router>
