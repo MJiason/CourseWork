@@ -1,7 +1,9 @@
 import React from "react";
-import CourseDataService from "../service/CourseDataService";
+
 import {Link} from "react-router-dom";
-import AuthenticationService from "../service/AuthenticationService";
+import AuthenticationService from "../../service/AuthenticationService";
+import CourseDataService from "../../service/CourseDataService";
+
 
 const {Component} = require("react");
 
@@ -11,9 +13,8 @@ class ListCoursesComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            courses: [],
+            users: [],
             message: null,
-            username: AuthenticationService.getLoggedInUserName()
         };
     }
 
@@ -22,10 +23,10 @@ class ListCoursesComponent extends Component {
     }
 
     deleteCourseClicked = (id) => {
-        CourseDataService.deleteCourse(this.state.username, id)
+        CourseDataService.deleteUser(id)
             .then(
                 response => {
-                    this.setState({message: `Delete of course ${id} Successful`})
+                    this.setState({message: `Delete of user ${id} Successful`})
                     this.refreshCourses()
                 }
             );
@@ -34,16 +35,17 @@ class ListCoursesComponent extends Component {
 
     refreshCourses = () => {
 
-        CourseDataService.retrieveAllCourses(this.state.username)//HARDCODED
+        CourseDataService.retrieveUser()
             .then(
                 response => {
                     console.log(response);
-                    this.setState({courses: response.data})
+                    this.setState({users: response.data})
                 }
             );
 
 
     }
+
 
 
     render() {
@@ -57,34 +59,29 @@ class ListCoursesComponent extends Component {
                         <tr>
                             <th>#</th>
                             <th>Id</th>
-                            <th>Description</th>
-                            <th>Update</th>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>username</th>
+                            <th>Role</th>
                         </tr>
                         </thead>
                         <tbody>
                         {
-                            this.state.courses.map(
-                                (course, index) =>
+                            this.state.users.map(
+                                (user, index) =>
                                     <tr key={index}>
                                         <td>{index}</td>
-                                        <td>{course.id}</td>
-                                        <td>{course.description}</td>
+                                        <td>{user.id}</td>
+                                        <td>{user.firstName}</td>
+                                        <td>{user.lastName}</td>
+                                        <td>{user.username}</td>
+                                        <td>{user.roles.map((role) => <p>{role.role.name}</p>)}</td>
                                         <td>
                                             <button
                                                 className="btn btn-warning"
-                                                onClick={() => this.deleteCourseClicked(course.id)}>
+                                                onClick={() => this.deleteCourseClicked(user.id)}>
                                                 Delete
                                             </button>
-                                        </td>
-                                        <td>
-                                            <Link to={`/courses/${course.id}`}>
-                                                <button
-                                                    className="btn btn-success"
-                                                    //onClick={(event) => {event.preventDefault(); event.stopPropagation();}
-                                                >
-                                                    Update
-                                                </button>
-                                            </Link>
                                         </td>
                                     </tr>
                             )
@@ -92,20 +89,11 @@ class ListCoursesComponent extends Component {
                         </tbody>
                     </table>
                     <div className="row">
-                        <Link to={"/courses/new"}>
+                        <Link to={"/users/new"}>
                             <button
                                 className="btn btn-success">
                                 Add
                             </button>
-                        </Link>
-
-                    </div>
-                    <div>
-                        <Link to={"/users"}>
-                        <button
-                            className="btn btn-success">
-                            Users
-                        </button>
                         </Link>
                     </div>
                 </div>

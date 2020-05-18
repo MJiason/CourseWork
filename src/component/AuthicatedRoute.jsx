@@ -8,7 +8,7 @@ class AuthenticatedRoute extends Component {
     render() {
         if (AuthenticationService.isUserLoggedIn()) {
             AuthenticationService.restoreAuth();
-            return <Route {...this.props} />
+                        return <Route {...this.props}  />
         } else {
             return <Redirect to="/login" />
         }
