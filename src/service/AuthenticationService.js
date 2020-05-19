@@ -1,4 +1,5 @@
 import axios from 'axios'
+import jwt from 'jwt-decode';
 
 const API_URL = 'http://localhost:8080'
 
@@ -14,6 +15,27 @@ class AuthenticationService {
             { headers: { authorization: this.createBasicAuthToken(username, password) } })
     }
 
+
+    getUser() {
+        const  jwtToken = this.getJwtToken();
+        if (!jwtToken){
+            return null;
+        }
+       const payload = jwt(jwtToken);
+        if(!payload){
+            return null;
+        }
+        return payload.user ? payload.user: null;
+    }
+
+    getJwtToken(){
+      const jwtToken = localStorage.getItem(TOKEN_NAME);
+        if (!jwtToken) {
+            return null;
+        }
+        return jwtToken;
+    }
+
     executeJwtAuthenticationService = (username, password) => {
         console.log(username);
         return axios.post(`${API_URL}/authenticate`, {
@@ -21,6 +43,7 @@ class AuthenticationService {
             password
         });
     }
+
 
     createBasicAuthToken = (username, password) => {
         return 'Basic ' + window.btoa(username + ":" + password);

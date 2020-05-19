@@ -14,32 +14,30 @@ class CourseComponent extends Component {
             username: '',
             firstName: '',
             lastName: '',
-            roleName: '',
+            roleId: 0,
+            roles: []
         }
 
     }
 
 
     componentDidMount() {
-        CourseDataService.rolesGet().then();
+        CourseDataService.rolesGet().then(response => {
+            this.setState({roles: response.data})
+        });
     }
 
 
     onSubmit = (values) => {
-        let username = this.state.username;
-        let firstName = this.state.firstName;
-        let lastName = this.state.lastName;
-        let role = this.state.roleName;
-
 
         let user = {
             username: values.username,
             firstName: values.firstName,
             lastName: values.lastName,
-            roleName: values.roleName,
+            roleId: Number(values.roleId),
 
         }
-        CourseDataService.createUser(user, user.roleName)
+        CourseDataService.createUser(user, user.roleId)
             .then(() => this.props.history.push('/users'))
     }
 
@@ -70,7 +68,8 @@ class CourseComponent extends Component {
         let username = this.state.username;
         let firstName = this.state.firstName;
         let lastName = this.state.lastName;
-        let roleName = this.state.roleName;
+        let roleId = this.state.roleId;
+        let roles = this.state.roles;
 
 
         return (
@@ -78,10 +77,10 @@ class CourseComponent extends Component {
                 <h3>Course</h3>
                 <div className="container">
                     <Formik
-                        initialValues={{username, firstName, lastName, roleName}}
+                        initialValues={{username, firstName, lastName, roleId, roles}}
                         enableReinitialize
                         onSubmit={this.onSubmit}
-                        validate={this.validate}
+                        // validate={this.validate}
                     >
                         {
                             (props) => (
@@ -102,7 +101,11 @@ class CourseComponent extends Component {
                                     </fieldset>
                                     <fieldset className="form-group">
                                         <label>Role</label>
-                                        <Field className="form-control" type="text" name="roleName"/>
+                                        <Field className="form-control" as="select" name="roleId">
+                                            <option>Choose role...</option>
+                                            {props.values.roles && props.values.roles.map((role,index) =>
+                                                <option key={index} value={role.id}>{role.name}</option>)}
+                                        </Field>
                                     </fieldset>
                                     <button className="btn btn-success" type="submit">Save</button>
                                 </Form>

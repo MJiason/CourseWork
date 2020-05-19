@@ -8,7 +8,6 @@ import CourseDataService from "../../service/CourseDataService";
 const {Component} = require("react");
 
 class ListCoursesComponent extends Component {
-    INSTRUCTOR = "misha";
 
     constructor(props) {
         super(props)
@@ -19,7 +18,7 @@ class ListCoursesComponent extends Component {
     }
 
     componentDidMount() {
-        this.refreshCourses();
+        this.refreshUsers();
     }
 
     deleteCourseClicked = (id) => {
@@ -27,18 +26,17 @@ class ListCoursesComponent extends Component {
             .then(
                 response => {
                     this.setState({message: `Delete of user ${id} Successful`})
-                    this.refreshCourses()
+                    this.refreshUsers()
                 }
             );
 
     }
 
-    refreshCourses = () => {
+    refreshUsers = () => {
 
         CourseDataService.retrieveUser()
             .then(
                 response => {
-                    console.log(response);
                     this.setState({users: response.data})
                 }
             );

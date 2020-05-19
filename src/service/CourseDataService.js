@@ -1,9 +1,11 @@
 import axios from 'axios'
 import AuthenticationService from "./AuthenticationService";
+import {Link} from "react-router-dom";
 
 let INSTRUCTOR = AuthenticationService.getLoggedInUserName();
 const COURSE_API_URL = 'http://localhost:8080'
 const INSTRUCTOR_API_URL = `${COURSE_API_URL}/instructors`
+
 
 class CourseDataService {
 
@@ -31,7 +33,7 @@ class CourseDataService {
     }
 
     createUser(user, roleName) {
-        return axios.post(`${COURSE_API_URL}/users/new/${roleName}`, user);
+        return axios.post(`${COURSE_API_URL}/users/new`, user);
     }
 
     retrieveUser() {
@@ -44,7 +46,7 @@ class CourseDataService {
     }
 
     rolesGet(){
-        return axios.get(`${COURSE_API_URL}/role/get`)
+        return axios.get(`${COURSE_API_URL}/roles`)
     }
 
 

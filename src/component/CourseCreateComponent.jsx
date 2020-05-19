@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import CourseDataService from '../service/CourseDataService';
-import AuthenticationService from "../service/AuthenticationService";
+import AuthenticationService, {TOKEN_NAME} from "../service/AuthenticationService";
+
 
 const INSTRUCTOR = 'in28minutes'
 
@@ -13,7 +14,7 @@ class CourseComponent extends Component {
 
         this.state = {
             description: '',
-            username: AuthenticationService.getLoggedInUserName()
+            username: AuthenticationService.getLoggedInUserName(),
         }
 
     }
@@ -28,7 +29,11 @@ class CourseComponent extends Component {
             targetDate: values.targetDate
         }
             CourseDataService.createCourse(username, course)
-                .then(() => this.props.history.push('/courses'))
+                .then((resp) =>
+                    this.props.history.push('/courses')).catch(error => {
+                alert(JSON.stringify(error.response.data));
+            })
+
     }
 
     validate = (values) => {
