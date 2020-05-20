@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import AuthenticationService from '../service/AuthenticationService';
 
-
+/**
+ *
+ */
 class LoginComponent extends Component {
 
     constructor(props) {
@@ -17,6 +19,10 @@ class LoginComponent extends Component {
 
     }
 
+    /**
+     *
+     * @param event
+     */
     handleChange = (event) => {
         this.setState(
             {
@@ -25,7 +31,9 @@ class LoginComponent extends Component {
             }
         )
     }
-
+    /**
+     *
+     */
     loginClicked = () => {
 
         AuthenticationService
@@ -47,6 +55,10 @@ class LoginComponent extends Component {
         })
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     render() {
         return (
             <div>

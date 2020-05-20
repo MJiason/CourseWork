@@ -6,9 +6,15 @@ import {common} from "../consts";
 
 const {Component} = require("react");
 
+/**
+ *
+ */
 class ListCoursesComponent extends Component {
 
-
+    /**
+     *
+     * @param props
+     */
     constructor(props) {
         super(props)
         this.state = {
@@ -20,10 +26,17 @@ class ListCoursesComponent extends Component {
         console.log(this.state.user)
     }
 
+    /**
+     *
+     */
     componentDidMount() {
         this.refreshCourses();
     }
 
+    /**
+     *
+     * @param id
+     */
     deleteCourseClicked = (id) => {
         CourseDataService.deleteCourse(this.state.username, id).catch(error => {
             if (error.response.data){
@@ -40,7 +53,9 @@ class ListCoursesComponent extends Component {
         );
 
     }
-
+    /**
+     *
+     */
     refreshCourses = () => {
 
         CourseDataService.retrieveAllCourses(this.state.username)
@@ -60,6 +75,12 @@ class ListCoursesComponent extends Component {
             });
         }
 
+    /**
+     *
+     * @param rolePermission
+     * @param resource
+     * @returns {boolean}
+     */
     hasRole(rolePermission, resource) {
         return this.state.user &&
             this.state.user.roles &&
@@ -67,7 +88,10 @@ class ListCoursesComponent extends Component {
             this.state.user.roles.some((role) => role.role.resource === resource && role.role[rolePermission]);
     }
 
-
+    /**
+     *
+     * @returns {*}
+     */
     render() {
 
         return (

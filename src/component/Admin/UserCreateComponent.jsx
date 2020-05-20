@@ -3,7 +3,9 @@ import {Formik, Form, Field, ErrorMessage} from 'formik';
 import AuthenticationService from "../../service/AuthenticationService";
 import CourseDataService from "../../service/CourseDataService";
 
-
+/**
+ *
+ */
 class CourseComponent extends Component {
 
     constructor(props) {
@@ -21,7 +23,9 @@ class CourseComponent extends Component {
 
     }
 
-
+    /**
+     *
+     */
     componentDidMount() {
         CourseDataService.rolesGet().then(response => {
             this.setState({roles: response.data})
@@ -35,7 +39,10 @@ class CourseComponent extends Component {
         });
     }
 
-
+    /**
+     *
+     * @param values
+     */
     onSubmit = (values) => {
 
         let user = {
@@ -55,7 +62,11 @@ class CourseComponent extends Component {
             alert(error);
         }).then(() => this.props.history.push('/users'))
     }
-
+    /**
+     *
+     * @param values
+     * @returns {{}}
+     */
     validate = (values) => {
         let errors = {}
         if (!values.username) {
@@ -78,6 +89,10 @@ class CourseComponent extends Component {
         }
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     render() {
 
         let username = this.state.username;

@@ -5,6 +5,9 @@ import AuthenticationService from "../service/AuthenticationService";
 
 const INSTRUCTOR = 'in28minutes'
 
+/**
+ *
+ */
 class CourseComponent extends Component {
 
     constructor(props) {
@@ -18,6 +21,9 @@ class CourseComponent extends Component {
 
     }
 
+    /**
+     *
+     */
     componentDidMount() {
 
         CourseDataService.retrieveCourse(INSTRUCTOR, this.state.id)
@@ -26,6 +32,10 @@ class CourseComponent extends Component {
             }));
     }
 
+    /**
+     *
+     * @param values
+     */
     onSubmit = (values) => {
         let username = this.state.username;
 
@@ -47,7 +57,11 @@ class CourseComponent extends Component {
 
 
     }
-
+    /**
+     *
+     * @param values
+     * @returns {{}}
+     */
     validate = (values) => {
         let errors = {}
         if (!values.description) {
@@ -62,7 +76,10 @@ class CourseComponent extends Component {
         return errors;
     }
 
-
+    /**
+     *
+     * @returns {*}
+     */
     render() {
 
         let {description, id} = this.state;

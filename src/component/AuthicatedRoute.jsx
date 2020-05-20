@@ -3,8 +3,14 @@ import { Route, Redirect } from 'react-router-dom'
 import AuthenticationService from "../service/AuthenticationService";
 
 
-
+/**
+ *
+ */
 class AuthenticatedRoute extends Component {
+    /**
+     *
+     * @returns {*}
+     */
     render() {
         if (AuthenticationService.isUserLoggedIn()) {
             AuthenticationService.restoreAuth();

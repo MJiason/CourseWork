@@ -2,13 +2,20 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import AuthenticationService from '../service/AuthenticationService';
 
+/**
+ *
+ */
 class MenuComponent extends Component {
-
+    /**
+     *
+     * @returns {*}
+     */
     render() {
         const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
         const user = AuthenticationService.getUser();
 
         return (
+
             <header>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                     <div><a className="navbar-brand">Home</a></div>

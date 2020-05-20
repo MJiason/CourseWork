@@ -11,6 +11,9 @@ import CourseCreateComponent from "./CourseCreateComponent";
 import ListAdminComponent from "./Admin/ListAdminComponent";
 import UserCreateComponent from "./Admin/UserCreateComponent";
 
+/**
+ *
+ */
 class InstructorApp extends Component {
 
 

@@ -8,6 +8,9 @@ import AuthenticationService from "../../service/AuthenticationService";
 
 const {Component} = require("react");
 
+/**
+ *
+ */
 class ListCoursesComponent extends Component {
 
     constructor(props) {
@@ -19,10 +22,17 @@ class ListCoursesComponent extends Component {
         };
     }
 
+    /**
+     *
+     */
     componentDidMount() {
         this.refreshUsers();
     }
 
+    /**
+     *
+     * @param id
+     */
     deleteCourseClicked = (id) => {
         CourseDataService.deleteUser(id)
             .then(
@@ -40,7 +50,9 @@ class ListCoursesComponent extends Component {
         })
 
     }
-
+    /**
+     *
+     */
     refreshUsers = () => {
 
         CourseDataService.retrieveUser()
@@ -58,6 +70,12 @@ class ListCoursesComponent extends Component {
         });
     }
 
+    /**
+     *
+     * @param rolePermission
+     * @param resource
+     * @returns {boolean}
+     */
     hasRole(rolePermission, resource) {
         return this.state.user &&
             this.state.user.roles &&
@@ -65,6 +83,10 @@ class ListCoursesComponent extends Component {
             this.state.user.roles.some((role) => role.role.resource === resource && role.role[rolePermission]);
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     render() {
         return (
             <div className="container">
