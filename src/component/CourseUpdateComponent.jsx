@@ -36,10 +36,16 @@ class CourseComponent extends Component {
         }
 
             CourseDataService.updateCourse(username, this.state.id, course)
-                .then(() => this.props.history.push('/courses'));
+                .then(() => this.props.history.push('/courses')).catch(error => {
+                if (error.response.data){
+                    alert(JSON.stringify(error.response.data));
+                    return;
+                }
+
+                alert(error);
+            });
 
 
-        console.log(values);
     }
 
     validate = (values) => {

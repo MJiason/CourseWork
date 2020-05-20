@@ -31,8 +31,13 @@ class CourseComponent extends Component {
             CourseDataService.createCourse(username, course)
                 .then((resp) =>
                     this.props.history.push('/courses')).catch(error => {
-                alert(JSON.stringify(error.response.data));
-            })
+                if (error.response.data){
+                    alert(JSON.stringify(error.response.data));
+                    return;
+                }
+
+                alert(error);
+            });
 
     }
 

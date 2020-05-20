@@ -25,13 +25,19 @@ class ListCoursesComponent extends Component {
     }
 
     deleteCourseClicked = (id) => {
-        CourseDataService.deleteCourse(this.state.username, id)
-            .then(
-                response => {
-                    this.setState({message: `Delete of course ${id} Successful`})
-                    this.refreshCourses()
-                }
-            );
+        CourseDataService.deleteCourse(this.state.username, id).catch(error => {
+            if (error.response.data){
+                alert(JSON.stringify(error.response.data));
+                return;
+            }
+
+            alert(error);
+        }).then(
+            response => {
+                this.setState({message: `Delete of course ${id} Successful`})
+                this.refreshCourses()
+            }
+        );
 
     }
 
@@ -43,11 +49,18 @@ class ListCoursesComponent extends Component {
                     console.log(response);
                     this.setState({courses: response.data})
                 }
-            );
 
+        ).catch(error => {
+            if (error.response.data){
+                alert(JSON.stringify(error.response.data));
+                return;
+            }
 
-    }
-    hasRole(rolePermission, resource){
+                alert(error);
+            });
+        }
+
+    hasRole(rolePermission, resource) {
         return this.state.user &&
             this.state.user.roles &&
             this.state.user.roles.length > 0 &&
@@ -56,8 +69,7 @@ class ListCoursesComponent extends Component {
 
 
     render() {
-        console.log(this.state)
-        // console.log(this.state.user.roles.some((role) => role.role.resource === 'courses' && role.role.write));
+
         return (
             <div className="container">
                 <h3>All Courses</h3>
@@ -68,11 +80,10 @@ class ListCoursesComponent extends Component {
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Id</th>
                             <th>Description</th>
-                            { this.hasRole(common.PERMISSION_DELETE, common.COURSES) &&
+                            {this.hasRole(common.PERMISSION_DELETE, common.COURSES) &&
                             <th>Delete</th>}
-                            { this.hasRole(common.PERMISSION_WRITE, common.COURSES) &&
+                            {this.hasRole(common.PERMISSION_WRITE, common.COURSES) &&
                             <th>Update</th>}
                         </tr>
                         </thead>
@@ -82,9 +93,8 @@ class ListCoursesComponent extends Component {
                                 (course, index) =>
                                     <tr key={index}>
                                         <td>{index}</td>
-                                        <td>{course.id}</td>
                                         <td>{course.description}</td>
-                                        { this.hasRole(common.PERMISSION_DELETE, common.COURSES) &&
+                                        {this.hasRole(common.PERMISSION_DELETE, common.COURSES) &&
                                         <td>
 
                                             <button
@@ -93,7 +103,7 @@ class ListCoursesComponent extends Component {
                                                 Delete
                                             </button>
                                         </td>}
-                                        { this.hasRole(common.PERMISSION_WRITE, common.COURSES) &&
+                                        {this.hasRole(common.PERMISSION_WRITE, common.COURSES) &&
                                         <td>
                                             <Link to={`/courses/${course.id}`}>
                                                 <button

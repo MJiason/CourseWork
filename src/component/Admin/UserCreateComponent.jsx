@@ -14,6 +14,7 @@ class CourseComponent extends Component {
             username: '',
             firstName: '',
             lastName: '',
+            password:'',
             roleId: 0,
             roles: []
         }
@@ -24,6 +25,13 @@ class CourseComponent extends Component {
     componentDidMount() {
         CourseDataService.rolesGet().then(response => {
             this.setState({roles: response.data})
+            }).catch(error => {
+            if (error.response.data){
+                alert(JSON.stringify(error.response.data));
+                return;
+            }
+
+            alert(error);
         });
     }
 
@@ -34,11 +42,18 @@ class CourseComponent extends Component {
             username: values.username,
             firstName: values.firstName,
             lastName: values.lastName,
+            password:values.password,
             roleId: Number(values.roleId),
 
         }
-        CourseDataService.createUser(user, user.roleId)
-            .then(() => this.props.history.push('/users'))
+        CourseDataService.createUser(user, user.roleId).catch(error => {
+            if (error.response.data){
+                alert(JSON.stringify(error.response.data));
+                return;
+            }
+
+            alert(error);
+        }).then(() => this.props.history.push('/users'))
     }
 
     validate = (values) => {
@@ -68,6 +83,7 @@ class CourseComponent extends Component {
         let username = this.state.username;
         let firstName = this.state.firstName;
         let lastName = this.state.lastName;
+        let password = this.state.password;
         let roleId = this.state.roleId;
         let roles = this.state.roles;
 
@@ -77,7 +93,7 @@ class CourseComponent extends Component {
                 <h3>Course</h3>
                 <div className="container">
                     <Formik
-                        initialValues={{username, firstName, lastName, roleId, roles}}
+                        initialValues={{username, firstName, lastName,password, roleId, roles}}
                         enableReinitialize
                         onSubmit={this.onSubmit}
                         // validate={this.validate}
@@ -98,6 +114,10 @@ class CourseComponent extends Component {
                                     <fieldset className="form-group">
                                         <label>username</label>
                                         <Field className="form-control" type="text" name="username"/>
+                                    </fieldset>
+                                    <fieldset className="form-group">
+                                        <label>password</label>
+                                        <Field className="form-control" type="text" name="password"/>
                                     </fieldset>
                                     <fieldset className="form-group">
                                         <label>Role</label>

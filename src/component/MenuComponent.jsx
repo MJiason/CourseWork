@@ -6,6 +6,7 @@ class MenuComponent extends Component {
 
     render() {
         const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
+        const user = AuthenticationService.getUser();
 
         return (
             <header>
@@ -17,6 +18,7 @@ class MenuComponent extends Component {
                     <ul className="navbar-nav navbar-collapse justify-content-end">
                         {!isUserLoggedIn && <li><Link className="nav-link" to="/login">Login</Link></li>}
                         {isUserLoggedIn && <li><Link className="nav-link" to="/logout" onClick={AuthenticationService.logout}>Logout</Link></li>}
+                        {isUserLoggedIn && <li style={{color: "white"}} >{user? user.lastName: ""}</li>}
                     </ul>
                 </nav>
             </header>

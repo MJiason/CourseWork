@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import AuthenticationService from '../service/AuthenticationService';
 
+
 class LoginComponent extends Component {
 
     constructor(props) {
@@ -34,11 +35,16 @@ class LoginComponent extends Component {
                 console.log(resp.data);
                 AuthenticationService.registerSuccessfulLoginForJwt(this.state.username, resp.data.token);
                 this.props.history.push(`/courses`);
-            }).catch(() => {
+            }).catch((error) => {
             this.setState({ showSuccessMessage: false });
             this.setState({ hasLoginFailed: true });
-        });
+            if (error.response.data){
+                alert(JSON.stringify(error.response.data));
+                return;
+            }
 
+            alert(error);
+        })
     }
 
     render() {
