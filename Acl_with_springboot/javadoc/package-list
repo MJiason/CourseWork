@@ -1,0 +1,6 @@
+com.MJaison.Acl_with_springboot
+com.MJaison.Acl_with_springboot.controllers
+com.MJaison.Acl_with_springboot.dtos
+com.MJaison.Acl_with_springboot.jwt
+com.MJaison.Acl_with_springboot.repository
+com.MJaison.Acl_with_springboot.services

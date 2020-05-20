@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: component/Admin/ListAdminComponent.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: component/Admin/ListAdminComponent.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+
+import {Link} from "react-router-dom";
+import {common} from "../../consts";
+import CourseDataService from "../../service/CourseDataService";
+import AuthenticationService from "../../service/AuthenticationService";
+
+
+const {Component} = require("react");
+
+/**
+ *
+ */
+class ListCoursesComponent extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            users: [],
+            message: null,
+            user: AuthenticationService.getUser()
+        };
+    }
+
+    /**
+     *
+     */
+    componentDidMount() {
+        this.refreshUsers();
+    }
+
+    /**
+     *
+     * @param id
+     */
+    deleteCourseClicked = (id) => {
+        CourseDataService.deleteUser(id)
+            .then(
+                response => {
+                    this.setState({message: `Delete of user ${id} Successful`})
+                    this.refreshUsers()
+                }
+            ).catch(error => {
+            if (error.response.data){
+                alert(JSON.stringify(error.response.data));
+                return;
+            }
+
+            alert(error);
+        })
+
+    }
+    /**
+     *
+     */
+    refreshUsers = () => {
+
+        CourseDataService.retrieveUser()
+            .then(
+                response => {
+                    this.setState({users: response.data})
+                }
+            ).catch(error => {
+            if (error.response.data){
+                alert(JSON.stringify(error.response.data));
+                return;
+            }
+
+            alert(error);
+        });
+    }
+
+    /**
+     *
+     * @param rolePermission
+     * @param resource
+     * @returns {boolean}
+     */
+    hasRole(rolePermission, resource) {
+        return this.state.user &amp;&amp;
+            this.state.user.roles &amp;&amp;
+            this.state.user.roles.length > 0 &amp;&amp;
+            this.state.user.roles.some((role) => role.role.resource === resource &amp;&amp; role.role[rolePermission]);
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    render() {
+        return (
+            &lt;div className="container">
+                &lt;h3>All Courses&lt;/h3>
+                {this.state.message &amp;&amp; &lt;div className="alert alert-success">{this.state.message}&lt;/div>}
+                &lt;div className="container">
+                    &lt;table className="table">
+                        &lt;thead>
+                        &lt;tr>
+                            &lt;th>#&lt;/th>
+                            &lt;th>FirstName&lt;/th>
+                            &lt;th>LastName&lt;/th>
+                            &lt;th>username&lt;/th>
+                            &lt;th>Role&lt;/th>
+                        &lt;/tr>
+                        &lt;/thead>
+                        &lt;tbody>
+                        {
+                            this.state.users.map(
+                                (user, index) =>
+                                    &lt;tr key={index}>
+                                        &lt;td>{index}&lt;/td>
+                                        &lt;td>{user.firstName}&lt;/td>
+                                        &lt;td>{user.lastName}&lt;/td>
+                                        &lt;td>{user.username}&lt;/td>
+                                        &lt;td>{user.roles.map((role) => &lt;p>{role.role.name}&lt;/p>)}&lt;/td>
+                                        { this.hasRole(common.PERMISSION_DELETE, common.USERS) &amp;&amp;
+                                        &lt;td>
+                                            &lt;button
+                                                className="btn btn-warning"
+                                                onClick={() => this.deleteCourseClicked(user.id)}>
+                                                Delete
+                                            &lt;/button>
+                                        &lt;/td> }
+                                    &lt;/tr>
+                            )
+                        }
+                        &lt;/tbody>
+                    &lt;/table>
+
+                    &lt;div className="row">
+                        {this.hasRole(common.PERMISSION_CREATE, common.USERS) &amp;&amp;
+                        &lt;Link to={"/users/new"}>
+                            &lt;button
+                                className="btn btn-success">
+                                Add
+                            &lt;/button>
+                        &lt;/Link>}
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        )
+    }
+}
+
+export default ListCoursesComponent</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthenticationService.html">AuthenticationService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TOKEN_NAME">TOKEN_NAME</a></li><li><a href="global.html#USER_NAME_SESSION_ATTRIBUTE_NAME">USER_NAME_SESSION_ATTRIBUTE_NAME</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed May 20 2020 04:45:02 GMT+0300 (GMT+03:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

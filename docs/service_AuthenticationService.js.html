@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: service/AuthenticationService.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: service/AuthenticationService.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import axios from 'axios'
+import jwt from 'jwt-decode';
+
+const API_URL = 'http://localhost:8080'
+/**
+ *
+ * @type {string}
+ */
+export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
+/**
+ *
+ * @type {string}
+ */
+export const TOKEN_NAME = 'token';
+
+/**
+ *
+ */
+class AuthenticationService {
+
+    axiosId = null;
+
+
+    /**
+     *
+     * @returns {null|any}
+     */
+    getUser() {
+        const  jwtToken = this.getJwtToken();
+        if (!jwtToken){
+            return null;
+        }
+       const payload = jwt(jwtToken);
+        if(!payload){
+            return null;
+        }
+        return payload.user ? payload.user: null;
+    }
+
+    /**
+     *
+     * @returns {string|null}
+     */
+    getJwtToken(){
+      const jwtToken = localStorage.getItem(TOKEN_NAME);
+        if (!jwtToken) {
+            return null;
+        }
+        return jwtToken;
+    }
+
+    /**
+     *
+     * @param username
+     * @param password
+     * @returns {Promise&lt;AxiosResponse&lt;any>>}
+     */
+    executeJwtAuthenticationService = (username, password) => {
+        console.log(username);
+        return axios.post(`${API_URL}/authenticate`, {
+            username,
+            password
+        });
+    }
+
+    /**
+     *
+     * @param username
+     * @param password
+     * @returns {string}
+     */
+    createBasicAuthToken = (username, password) => {
+        return 'Basic ' + window.btoa(username + ":" + password);
+    }
+
+    registerSuccessfulLogin(username, password) {
+        //let basicAuthHeader = 'Basic ' +  window.btoa(username + ":" + password)
+        //console.log('registerSuccessfulLogin')
+        localStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);
+        this.setupAxiosInterceptors(this.createBasicAuthToken(username, password));
+    }
+
+    /**
+     *
+     * @param username
+     * @param token
+     */
+    registerSuccessfulLoginForJwt = (username, token) => {
+        localStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);
+        localStorage.setItem(TOKEN_NAME, token);
+        this.setupAxiosInterceptors(this.createJWTToken(token));
+    }
+    /**
+     *
+     * @param token
+     * @returns {string}
+     */
+    createJWTToken = (token) => {
+        return 'Bearer ' + token;
+    }
+
+    /**
+     *
+     */
+    logout = () => {
+        localStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+        localStorage.removeItem(TOKEN_NAME);
+        this.ejectAxiosInterceptors();
+    }
+    /**
+     *
+     */
+    restoreAuth = () => {
+        const token = localStorage.getItem(TOKEN_NAME);
+        this.setupAxiosInterceptors(this.createJWTToken(token));
+    }
+    /**
+     *
+     * @returns {boolean}
+     */
+    isUserLoggedIn = () => {
+        let user = localStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+        if (user === null) return false;
+        return true;
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    getLoggedInUserName() {
+        let user = localStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+        if (user === null) return '';
+        return user;
+    }
+
+    /**
+     *
+     * @param token
+     */
+    setupAxiosInterceptors = (token) => {
+       this.axiosId = axios.interceptors.request.use(
+            (config) => {
+                if (this.isUserLoggedIn()) {
+                    config.headers.authorization = token;
+                }
+                return config;
+            }
+        );
+    }
+    /**
+     *
+     */
+    ejectAxiosInterceptors = () => {
+        if (this.axiosId === null){
+            return;
+        }
+        axios.interceptors.request.eject(this.axiosId);
+    }
+}
+
+export default new AuthenticationService();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthenticationService.html">AuthenticationService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TOKEN_NAME">TOKEN_NAME</a></li><li><a href="global.html#USER_NAME_SESSION_ATTRIBUTE_NAME">USER_NAME_SESSION_ATTRIBUTE_NAME</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed May 20 2020 04:45:02 GMT+0300 (GMT+03:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
