@@ -17,8 +17,9 @@ class MenuComponent extends Component {
                     </ul>
                     <ul className="navbar-nav navbar-collapse justify-content-end">
                         {!isUserLoggedIn && <li><Link className="nav-link" to="/login">Login</Link></li>}
+                        {isUserLoggedIn && <li style={{color: "white"}} >{user? `${user.lastName} (${user.username})` : ""}</li>}
                         {isUserLoggedIn && <li><Link className="nav-link" to="/logout" onClick={AuthenticationService.logout}>Logout</Link></li>}
-                        {isUserLoggedIn && <li style={{color: "white"}} >{user? user.lastName: ""}</li>}
+
                     </ul>
                 </nav>
             </header>
